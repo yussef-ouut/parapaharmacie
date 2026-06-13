@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport Technique — ParaChatbot | Youssef Aotarid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        /* COVER */
+        .cover {
+            background: linear-gradient(135deg, #0f172a, #059669);
+            color: white;
+            text-align: center;
+            padding: 80px 40px;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .cover h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+        .cover h2 { font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.75); margin-bottom: 40px; }
+        .cover-info { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 2; }
+
+        /* CONTAINER */
+        .container { max-width: 800px; margin: 0 auto; padding: 50px 30px; }
+
+        /* SECTION TITLE */
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #059669;
+        }
+        .section-title:first-child { margin-top: 0; }
+
+        /* SIMPLE TEXT */
+        p { margin-bottom: 14px; }
+        strong { color: #059669; }
+
+        /* FILE BLOCK */
+        .file-block {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid #059669;
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin-bottom: 18px;
+        }
+        .file-block.js { border-left-color: #eab308; }
+        .file-block.css { border-left-color: #2563eb; }
+        .file-block.tpl { border-left-color: #f97316; }
+
+        .file-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        .file-path {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            font-family: monospace;
+        }
+        .file-block p { font-size: 14.5px; margin-bottom: 8px; }
+        .file-block ul { padding-left: 20px; margin-top: 6px; }
+        .file-block li { font-size: 14px; margin-bottom: 4px; }
+
+        /* STEP BLOCK (for flow) */
+        .step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 6px;
+            align-items: flex-start;
+        }
+        .step-num {
+            width: 32px; height: 32px;
+            background: #059669;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-text { flex: 1; font-size: 14.5px; }
+        .step-text strong { color: #0f172a; }
+
+        .arrow { text-align: center; color: #059669; font-size: 20px; margin: 4px 0; padding-left: 8px; }
+
+        /* NOTE BOX */
+        .note {
+            background: #ecfdf5;
+            border-left: 4px solid #059669;
+            padding: 16px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+        th {
+            background: #0f172a;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tr:nth-child(even) td { background: #f8fafc; }
+
+        /* TREE */
+        .tree {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.9;
+            margin: 16px 0;
+        }
+        .tree .green { color: #86efac; }
+        .tree .yellow { color: #fde68a; }
+        .tree .blue { color: #93c5fd; }
+        .tree .gray { color: #64748b; }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+            font-size: 13px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 50px;
+        }
+
+        @media print {
+            .cover { min-height: auto; padding: 40px; }
+            .cover h1 { font-size: 30px; }
+            body { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== PAGE DE COUVERTURE ==================== -->
+<div class="cover">
+    <h1>ParaChatbot</h1>
+    <h2>Module Chatbot IA pour Parapharmacie — PrestaShop</h2>
+    <div class="cover-info">
+        <strong>Réalisé par :</strong> Youssef Aotarid<br>
+        <strong>Formation :</strong> BTS Développement Web Full Stack — 2ème Année<br>
+        <strong>Entreprise :</strong> Kingphar.ma — Parapharmacie, Marrakech<br>
+        <strong>Date :</strong> Juin 2026
+    </div>
+</div>
+
+<!-- ==================== CONTENU ==================== -->
+<div class="container">
+
+
+<!-- ======================================================= -->
+<!-- 1. C'EST QUOI CE PROJET ?                               -->
+<!-- ======================================================= -->
+<div class="section-title">1. C'est quoi ce projet ?</div>
+
+<p>Ce projet est un <strong>module PrestaShop</strong> qui ajoute un <strong>chatbot intelligent</strong> sur le site e-commerce de la parapharmacie <strong>Kingphar.ma</strong> (Marrakech).</p>
+
+<p>Le chatbot s'affiche sur toutes les pages du site. Le client peut écrire en <strong>français</strong>, en <strong>arabe</strong> ou en <strong>darija</strong> (dialecte marocain). Le chatbot comprend la demande, cherche les produits dans la base de données, et utilise <strong>Google Gemini</strong> (Intelligence Artificielle) pour formuler une réponse adaptée avec des recommandations de vrais produits.</p>
+
+<div class="note">
+    <strong>Exemple :</strong> Un client écrit <em>"wejhi fih lhboub"</em> (darija = "j'ai des boutons au visage").<br>
+    → Le chatbot traduit → cherche les produits anti-acné dans la base de données → demande à l'IA Google Gemini de formuler une réponse → affiche la réponse + les produits avec images et prix.
+</div>
+
+<p><strong>Importation des produits :</strong> Le vrai site Kingphar.ma contient environ <strong>2600 produits</strong>. J'ai développé un script PHP intelligent qui extrait automatiquement tous ces produits (noms, descriptions, prix, images) depuis le site réel et les importe directement dans ce site de démonstration PrestaShop. Le chatbot travaille donc avec de vrais produits.</p>
+
+
+<!-- ======================================================= -->
+<!-- 2. OÙ SE TROUVE LE MODULE ?                             -->
+<!-- ======================================================= -->
+<div class="section-title">2. Où se trouve le module ?</div>
+
+<p>Le module se trouve dans le dossier de PrestaShop, dans le chemin suivant :</p>
+<p style="font-family: monospace; background: #f1f5f9; padding: 12px 18px; border-radius: 8px; font-size: 14px;">
+    prestashop/ → modules/ → <strong>parachatbot/</strong>
+</p>
+
+<p>Voici tous les fichiers du module :</p>
+
+<div class="tree">
+<span class="green">parachatbot/</span>
+├── <span class="green">parachatbot.php</span> <span class="gray">← Fichier principal du module</span>
+├── <span class="green">ajax_chat.php</span> <span class="gray">← Reçoit les messages du client (AJAX)</span>
+├── <span class="green">save_key.php</span> <span class="gray">← Sauvegarde la clé API</span>
+│
+├── <span class="yellow">classes/</span> <span class="gray">← La logique métier (le cerveau)</span>
+│   ├── <span class="green">ChatService.php</span> <span class="gray">← Orchestre tout le traitement</span>
+│   ├── <span class="green">ProductService.php</span> <span class="gray">← Cherche les produits en BDD</span>
+│   └── <span class="green">AIService.php</span> <span class="gray">← Communique avec Google Gemini</span>
+│
+├── <span class="yellow">controllers/front/</span>
+│   └── <span class="green">chat.php</span> <span class="gray">← Contrôleur front PrestaShop</span>
+│
+└── <span class="yellow">views/</span> <span class="gray">← L'interface visible</span>
+    ├── <span class="blue">css/chatbot.css</span> <span class="gray">← Le design du widget</span>
+    ├── <span class="blue">js/chatbot_v2.js</span> <span class="gray">← Le JavaScript qui gère l'interactivité</span>
+    └── <span class="yellow">templates/hook/</span>
+        └── <span class="blue">chat.tpl</span> <span class="gray">← Le code HTML du widget</span>
+</div>
+
+
+<!-- ======================================================= -->
+<!-- 3. EXPLICATION DE CHAQUE FICHIER                        -->
+<!-- ======================================================= -->
+<div class="section-title">3. Explication de chaque fichier</div>
+
+<p>Voici chaque fichier expliqué simplement, dans l'ordre logique du projet :</p>
+
+<!-- ---- parachatbot.php ---- -->
+<div class="file-block">
+    <div class="file-name">📦 parachatbot.php</div>
+    <div class="file-path">modules/parachatbot/parachatbot.php</div>
+    <p><strong>C'est quoi ?</strong> C'est le fichier principal du module. C'est lui qui dit à PrestaShop : "je suis un module, installe-moi".</p>
+    <p><strong>Qu'est-ce qu'il fait ?</strong></p>
+    <ul>
+        <li>Il <strong>installe</strong> le module dans PrestaShop (fonction <code>install()</code>)</li>
+        <li>Il <strong>charge</strong> le fichier CSS et le fichier JavaScript sur toutes les pages du site</li>
+        <li>Il <strong>injecte</strong> le widget HTML (le chat) dans le bas de chaque page (hook <code>displayFooter</code>)</li>
+        <li>Il affiche la <strong>page de configuration</strong> dans l'admin (pour saisir la clé API Gemini et voir les statistiques)</li>
+    </ul>
+</div>
+
+<!-- ---- chat.tpl ---- -->
+<div class="file-block tpl">
+    <div class="file-name">🎨 chat.tpl</div>
+    <div class="file-path">views/templates/hook/chat.tpl</div>
+    <p><strong>C'est quoi ?</strong> C'est le fichier <strong>HTML</strong> du widget chatbot. C'est ce que le visiteur voit sur l'écran.</p>
+    <p><strong>Qu'est-ce qu'il contient ?</strong></p>
+    <ul>
+        <li>Le <strong>bouton vert</strong> "IA Conseiller Kingphar" en bas à droite</li>
+        <li>La <strong>fenêtre de chat</strong> qui s'ouvre quand on clique</li>
+        <li>Le <strong>message d'accueil</strong> du bot</li>
+        <li>Les <strong>4 boutons de suggestions</strong> rapides (Peau sèche, Chute Cheveux, etc.)</li>
+        <li>Le <strong>champ de saisie</strong> pour taper un message</li>
+    </ul>
+</div>
+
+<!-- ---- chatbot.css ---- -->
+<div class="file-block css">
+    <div class="file-name">🎨 chatbot.css</div>
+    <div class="file-path">views/css/chatbot.css</div>
+    <p><strong>C'est quoi ?</strong> C'est le fichier <strong>CSS</strong> (la mise en forme). Il contient tout le design visuel du chatbot.</p>
+    <p><strong>Qu'est-ce qu'il fait ?</strong></p>
+    <ul>
+        <li>Les <strong>couleurs</strong> (vert pour le bot, bleu pour le client)</li>
+        <li>La forme des <strong>bulles de messages</strong></li>
+        <li>Le design des <strong>cartes produits</strong> (image + nom + prix + bouton Commander)</li>
+        <li>Les <strong>animations</strong> (apparition des messages, points de chargement)</li>
+        <li>L'adaptation pour <strong>mobile</strong> (responsive)</li>
+    </ul>
+</div>
+
+<!-- ---- chatbot_v2.js ---- -->
+<div class="file-block js">
+    <div class="file-name">⚡ chatbot_v2.js</div>
+    <div class="file-path">views/js/chatbot_v2.js</div>
+    <p><strong>C'est quoi ?</strong> C'est le fichier <strong>JavaScript</strong>. C'est le moteur interactif du chatbot côté navigateur.</p>
+    <p><strong>Qu'est-ce qu'il fait ?</strong></p>
+    <ul>
+        <li><strong>Ouvre et ferme</strong> la fenêtre de chat quand on clique sur le bouton</li>
+        <li>Quand le client envoie un message → il <strong>envoie le message au serveur</strong> en AJAX (<code>fetch</code>) vers <code>ajax_chat.php</code></li>
+        <li>Il attend la réponse et <strong>affiche la bulle du bot</strong> avec un effet d'écriture lettre par lettre</li>
+        <li>Il <strong>affiche les cartes produits</strong> recommandés (image, nom, prix, bouton "Commander")</li>
+        <li>Il <strong>sauvegarde l'historique</strong> dans le navigateur (localStorage) pour ne pas le perdre si on recharge la page</li>
+        <li>Il gère le bouton <strong>Réinitialiser</strong> (supprimer la conversation)</li>
+    </ul>
+</div>
+
+<!-- ---- ajax_chat.php ---- -->
+<div class="file-block">
+    <div class="file-name">🔌 ajax_chat.php</div>
+    <div class="file-path">modules/parachatbot/ajax_chat.php</div>
+    <p><strong>C'est quoi ?</strong> C'est le fichier qui <strong>reçoit les messages</strong> envoyés par le JavaScript. C'est la porte d'entrée côté serveur.</p>
+    <p><strong>Qu'est-ce qu'il fait ?</strong></p>
+    <ul>
+        <li>Il reçoit le message du client en format JSON</li>
+        <li>Il vérifie que le message n'est pas vide</li>
+        <li>Il crée les 3 services (ChatService, ProductService, AIService)</li>
+        <li>Il appelle <code>ChatService->processMessage()</code> pour traiter le message</li>
+        <li>Il retourne la réponse en JSON au JavaScript</li>
+    </ul>
+    <div class="note">
+        <strong>Pourquoi ce fichier ?</strong> C'est un raccourci rapide. Au lieu de passer par tout le framework lourd de PrestaShop, ce fichier charge uniquement le minimum nécessaire. Résultat : le chatbot répond plus vite.
+    </div>
+</div>
+
+<!-- ---- ChatService.php ---- -->
+<div class="file-block">
+    <div class="file-name">🧠 ChatService.php</div>
+    <div class="file-path">classes/ChatService.php</div>
+    <p><strong>C'est quoi ?</strong> C'est le fichier <strong>le plus important</strong>. C'est le chef d'orchestre qui coordonne tout.</p>
+    <p><strong>Qu'est-ce qu'il fait ?</strong> Quand il reçoit un message, il fait ces étapes dans l'ordre :</p>
+    <ul>
+        <li><strong>Étape 1</strong> — Il identifie la session du client (qui parle ?)</li>
+        <li><strong>Étape 2</strong> — Il regarde si c'est juste une salutation ("bonjour", "salam") → si oui, pas besoin de chercher des produits</li>
+        <li><strong>Étape 3</strong> — Il regarde si quelqu'un a déjà posé la même question avant → si oui, il réutilise l'ancienne réponse (économie d'API)</li>
+        <li><strong>Étape 4</strong> — Il essaie de <strong>traduire le darija en français</strong> avec un dictionnaire interne (par exemple : "lhboub" → "acné bouton visage")</li>
+        <li><strong>Étape 5</strong> — Il demande à <strong>ProductService</strong> de chercher les produits correspondants dans la base de données</li>
+        <li><strong>Étape 6</strong> — Il envoie le message + les produits trouvés à <strong>AIService</strong> (Google Gemini) pour avoir une réponse intelligente</li>
+        <li><strong>Étape 7</strong> — Il <strong>sauvegarde</strong> le message et la réponse dans la base de données</li>
+        <li><strong>Étape 8</strong> — Il retourne la réponse + les produits au JavaScript</li>
+    </ul>
+</div>
+
+<!-- ---- ProductService.php ---- -->
+<div class="file-block">
+    <div class="file-name">🔍 ProductService.php</div>
+    <div class="file-path">classes/ProductService.php</div>
+    <p><strong>C'est quoi ?</strong> C'est le service qui <strong>cherche les produits</strong> dans la base de données MySQL de PrestaShop.</p>
+    <p><strong>Qu'est-ce qu'il fait ?</strong></p>
+    <ul>
+        <li>Il reçoit des mots-clés (par exemple : "acné", "bouton", "visage")</li>
+        <li>Il fait une <strong>requête SQL</strong> pour chercher dans les noms et descriptions des produits</li>
+        <li>Il retourne une liste de produits avec : <strong>nom, prix, image, lien, stock, catégorie</strong></li>
+    </ul>
+    <div class="note">
+        <strong>Exemple simplifié de la requête SQL :</strong><br>
+        <code>SELECT nom, prix FROM produits WHERE nom LIKE '%acné%' OR description LIKE '%bouton%'</code>
+    </div>
+</div>
+
+<!-- ---- AIService.php ---- -->
+<div class="file-block">
+    <div class="file-name">🤖 AIService.php</div>
+    <div class="file-path">classes/AIService.php</div>
+    <p><strong>C'est quoi ?</strong> C'est le service qui <strong>communique avec Google Gemini</strong> (l'Intelligence Artificielle).</p>
+    <p><strong>Qu'est-ce qu'il fait ?</strong></p>
+    <ul>
+        <li>Il construit un <strong>message structuré</strong> pour Gemini avec :
+            <ul>
+                <li>Les <strong>instructions</strong> (tu es le conseiller de Kingphar.ma, réponds en darija/français, ne recommande que les vrais produits)</li>
+                <li>La <strong>liste des produits trouvés</strong> par ProductService</li>
+                <li>L'<strong>historique</strong> de la conversation (les messages précédents)</li>
+                <li>Le <strong>message actuel</strong> du client</li>
+            </ul>
+        </li>
+        <li>Il <strong>envoie tout à l'API Google Gemini</strong> via une requête HTTP (cURL)</li>
+        <li>Il reçoit la réponse de Gemini et la retourne</li>
+        <li>Si l'API est surchargée (erreur 503), il <strong>réessaie automatiquement</strong> jusqu'à 4 fois</li>
+    </ul>
+</div>
+
+<!-- ---- chat.php controller ---- -->
+<div class="file-block">
+    <div class="file-name">🔀 chat.php (contrôleur)</div>
+    <div class="file-path">controllers/front/chat.php</div>
+    <p><strong>C'est quoi ?</strong> C'est le <strong>contrôleur front</strong> officiel de PrestaShop. Il fait la même chose que <code>ajax_chat.php</code>, mais en passant par le framework complet de PrestaShop.</p>
+    <p>En pratique, le chatbot utilise <code>ajax_chat.php</code> (plus rapide). Ce fichier existe comme solution de secours.</p>
+</div>
+
+<!-- ---- save_key.php ---- -->
+<div class="file-block">
+    <div class="file-name">🔑 save_key.php</div>
+    <div class="file-path">modules/parachatbot/save_key.php</div>
+    <p><strong>C'est quoi ?</strong> Un petit script utilitaire pour <strong>enregistrer la clé API Google Gemini</strong> directement dans la base de données. Utile quand la page admin ne marche pas.</p>
+</div>
+
+
+<!-- ======================================================= -->
+<!-- 4. LE DÉROULEMENT COMPLET                               -->
+<!-- ======================================================= -->
+<div class="section-title">4. Le déroulement complet (quand un client envoie un message)</div>
+
+<p>Voici exactement ce qui se passe quand un visiteur envoie un message dans le chatbot :</p>
+
+<div class="step">
+    <div class="step-num">1</div>
+    <div class="step-text"><strong>Le client tape un message</strong> (ex: "wejhi fih lhboub") et clique sur Envoyer</div>
+</div>
+<div class="arrow">↓</div>
+
+<div class="step">
+    <div class="step-num">2</div>
+    <div class="step-text"><strong>chatbot_v2.js</strong> capture le message et l'envoie en AJAX (fetch POST) vers <strong>ajax_chat.php</strong></div>
+</div>
+<div class="arrow">↓</div>
+
+<div class="step">
+    <div class="step-num">3</div>
+    <div class="step-text"><strong>ajax_chat.php</strong> reçoit le message et crée les 3 services, puis appelle <strong>ChatService</strong></div>
+</div>
+<div class="arrow">↓</div>
+
+<div class="step">
+    <div class="step-num">4</div>
+    <div class="step-text"><strong>ChatService</strong> traduit le darija : "lhboub" → "acné bouton visage"</div>
+</div>
+<div class="arrow">↓</div>
+
+<div class="step">
+    <div class="step-num">5</div>
+    <div class="step-text"><strong>ProductService</strong> cherche dans la base de données MySQL : <code>WHERE nom LIKE '%acné%'</code> → trouve les produits</div>
+</div>
+<div class="arrow">↓</div>
+
+<div class="step">
+    <div class="step-num">6</div>
+    <div class="step-text"><strong>AIService</strong> envoie le message + les produits trouvés à <strong>Google Gemini</strong> → Gemini répond avec une recommandation personnalisée</div>
+</div>
+<div class="arrow">↓</div>
+
+<div class="step">
+    <div class="step-num">7</div>
+    <div class="step-text"><strong>ChatService</strong> sauvegarde le message et la réponse dans la table <code>ps_parachatbot_conversation</code></div>
+</div>
+<div class="arrow">↓</div>
+
+<div class="step">
+    <div class="step-num">8</div>
+    <div class="step-text"><strong>chatbot_v2.js</strong> reçoit la réponse JSON et affiche la bulle du bot + les cartes produits avec images et prix</div>
+</div>
+
+
+<!-- ======================================================= -->
+<!-- 5. LA BASE DE DONNÉES                                   -->
+<!-- ======================================================= -->
+<div class="section-title">5. La base de données</div>
+
+<p>Le module utilise une table MySQL pour stocker toutes les conversations :</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Colonne</th>
+            <th>C'est quoi ?</th>
+            <th>Exemple</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>id_message</strong></td><td>Numéro unique du message</td><td>1, 2, 3...</td></tr>
+        <tr><td><strong>session_id</strong></td><td>Identifiant de la conversation</td><td>sess_abc123_178...</td></tr>
+        <tr><td><strong>role</strong></td><td>Qui a envoyé le message</td><td>"user" ou "assistant"</td></tr>
+        <tr><td><strong>content</strong></td><td>Le texte du message</td><td>"wejhi fih lhboub"</td></tr>
+        <tr><td><strong>created_at</strong></td><td>La date et l'heure</td><td>2026-06-10 20:04:22</td></tr>
+    </tbody>
+</table>
+
+<p>Pour les produits, le module ne crée pas de nouvelle table. Il utilise les tables <strong>existantes de PrestaShop</strong> (<code>ps_product</code>, <code>ps_product_lang</code>, <code>ps_category_lang</code>, <code>ps_image</code>) pour chercher les produits.</p>
+
+
+<!-- ======================================================= -->
+<!-- 6. LES TECHNOLOGIES                                     -->
+<!-- ======================================================= -->
+<div class="section-title">6. Les technologies utilisées</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Technologie</th>
+            <th>Pour quoi faire ?</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>PHP 8.2</strong></td><td>Toute la logique serveur (services, API, BDD)</td></tr>
+        <tr><td><strong>PrestaShop 1.7+</strong></td><td>Le CMS e-commerce (modules, hooks, admin)</td></tr>
+        <tr><td><strong>MySQL</strong></td><td>Base de données (produits, conversations)</td></tr>
+        <tr><td><strong>HTML / CSS / JavaScript</strong></td><td>L'interface du chatbot visible par le client</td></tr>
+        <tr><td><strong>Google Gemini API</strong></td><td>Intelligence Artificielle (comprendre + répondre)</td></tr>
+        <tr><td><strong>AJAX (Fetch API)</strong></td><td>Envoyer les messages au serveur sans recharger la page</td></tr>
+        <tr><td><strong>Smarty (.tpl)</strong></td><td>Moteur de templates de PrestaShop (pour le HTML)</td></tr>
+        <tr><td><strong>cURL</strong></td><td>Envoyer des requêtes HTTP vers l'API Google Gemini</td></tr>
+        <tr><td><strong>Apache (XAMPP)</strong></td><td>Serveur web local pour le développement</td></tr>
+    </tbody>
+</table>
+
+
+<!-- ======================================================= -->
+<!-- 7. RÉSUMÉ SIMPLE                                        -->
+<!-- ======================================================= -->
+<div class="section-title">7. Résumé en une phrase par fichier</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Fichier</th>
+            <th>Il fait quoi ?</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>parachatbot.php</strong></td><td>Installe le module et charge le CSS/JS sur toutes les pages</td></tr>
+        <tr><td><strong>chat.tpl</strong></td><td>Le code HTML du widget chatbot (ce que le client voit)</td></tr>
+        <tr><td><strong>chatbot.css</strong></td><td>Le design : couleurs, bulles, cartes produits, animations</td></tr>
+        <tr><td><strong>chatbot_v2.js</strong></td><td>Gère les clics, envoie les messages, affiche les réponses</td></tr>
+        <tr><td><strong>ajax_chat.php</strong></td><td>Reçoit le message du client et lance le traitement</td></tr>
+        <tr><td><strong>ChatService.php</strong></td><td>Le chef d'orchestre : session, traduction, cache, appel IA</td></tr>
+        <tr><td><strong>ProductService.php</strong></td><td>Cherche les produits dans la base de données MySQL</td></tr>
+        <tr><td><strong>AIService.php</strong></td><td>Envoie tout à Google Gemini et récupère la réponse IA</td></tr>
+        <tr><td><strong>chat.php (controller)</strong></td><td>Contrôleur alternatif PrestaShop (solution de secours)</td></tr>
+        <tr><td><strong>save_key.php</strong></td><td>Petit script pour enregistrer la clé API Gemini</td></tr>
+    </tbody>
+</table>
+
+
+<!-- FOOTER -->
+<div class="footer">
+    <strong>Rapport Technique — Module ParaChatbot</strong><br>
+    Youssef Aotarid — BTS DWFS 2ème Année — Kingphar.ma — Juin 2026
+</div>
+
+</div>
+</body>
+</html>
